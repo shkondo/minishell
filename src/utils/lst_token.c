@@ -1,35 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   lst_token.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 03:25:39 by shkondo           #+#    #+#             */
-/*   Updated: 2025/04/29 03:23:03 by shkondo          ###   ########.fr       */
+/*   Created: 2025/12/25 18:40:42 by shkondo           #+#    #+#             */
+/*   Updated: 2025/12/25 18:43:41 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-char	*ft_strdup(const char *s)
-{
-	int		i;
-	int		len;
-	char	*dst;
+t_token	*create_token(t_word *word, t_token *next);
 
-	if (!s)
-		return (NULL);
-	i = 0;
-	len = ft_strlen(s);
-	dst = (char *)malloc((len + 1) * sizeof(char));
-	if (dst == NULL)
-		return (NULL);
-	while (s[i])
-	{
-		dst[i] = s[i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (dst);
-}
+t_token	*token_add_back(t_token **lst, t_word *word);
+
+t_token	*copy_tokens(t_token *tokens);
+
+void	free_tokens(t_token *tokens);
+
+size_t	token_list_size(t_token *token);

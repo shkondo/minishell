@@ -6,7 +6,7 @@
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 01:33:10 by shkondo           #+#    #+#             */
-/*   Updated: 2025/12/23 00:44:51 by shkondo          ###   ########.fr       */
+/*   Updated: 2025/12/24 21:37:11 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 # define MINISHELL_H
 
 # include "builtin.h"
+# include "command.h"
 # include "executor.h"
-# include "lexer.h"
 # include "libft.h"
 # include "parser.h"
+# include <errno.h>
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <stdio.h>
@@ -35,10 +36,10 @@ typedef struct s_shell
 {
 	char	*envp;
 	int		exit_status;
-}
+}			t_shell;
 
-void		msh_loop(void);
-char		*msh_read_line(void);
+void		launch(char **args);
+void		loop(void);
 
 int			ft_cd(char **args);
 int			ft_help(char **args);
