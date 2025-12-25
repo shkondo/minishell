@@ -1,22 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalpha.c                                       :+:      :+:    :+:   */
+/*   ft_lst_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 04:43:40 by shkondo           #+#    #+#             */
-/*   Updated: 2025/05/04 21:42:55 by shkondo          ###   ########.fr       */
+/*   Created: 2025/12/25 18:38:34 by shkondo           #+#    #+#             */
+/*   Updated: 2025/12/25 18:39:39 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_isalpha(int c)
-{
-	if (c == EOF)
-		return (FALSE);
-	if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
-		return (TRUE);
-	return (FALSE);
-}
+t_word	*create_word(char *str, int type);
+
+t_word	*copy_word(t_word *word);
+
+void	free_word(t_word *word);
+
+void	set_word_flags(t_word *word, char *str);
