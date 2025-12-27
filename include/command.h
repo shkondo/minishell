@@ -6,7 +6,7 @@
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 00:29:53 by shkondo           #+#    #+#             */
-/*   Updated: 2025/12/25 18:43:38 by shkondo          ###   ########.fr       */
+/*   Updated: 2025/12/26 20:10:03 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define ERR_PERM 126
 # define ERR_CMD 127
 
-typedef enum e_tok_type
+typedef enum e_token_kind
 {
 	TOKEN_WORD,
 	TOKEN_PIPE,
@@ -38,18 +38,18 @@ typedef enum e_tok_type
 	TOKEN_REDIR_OUT,
 	TOKEN_HEREDOC,
 	TOKEN_APPEND
-}					t_tok_type;
+}					t_token_kind;
 
 typedef struct s_word
 {
 	char			*str;
-	int				type;
 	int				flags;
 }					t_word;
 
 typedef struct s_token
 {
 	t_word			*word;
+	t_token_kind	kind;
 	struct s_token	*next;
 }					t_token;
 
@@ -64,6 +64,6 @@ t_token				*copy_tokens(t_token *tokens);
 void				free_tokens(t_token *tokens);
 size_t				token_list_size(t_token *token);
 
-t_token				*tokenize(char *line);
+t_token				*tokenize(char *p);
 
 #endif
