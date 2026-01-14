@@ -1,3 +1,14 @@
+# macOS
 .DS_Store
+
+# Editor
 .$module_diagram.drawio.bkp
 CLAUDE.md
+
+# Build artifacts
+*.o
+*.a
+minishell
+
+# Temporary files
+tmp/
