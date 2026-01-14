@@ -12,3 +12,7 @@ minishell
 
 # Temporary files
 tmp/
+
+# Local directories
+subjects/
+test/
