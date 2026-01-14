@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   make_cmd.c                                         :+:      :+:    :+:   */
+/*   dispose_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,44 +12,44 @@
 
 #include "minishell.h"
 
-t_cmd	*make_simple_command(void)
+void	dispose_redirects(t_redir *redir)
 {
-	t_cmd	*cmd;
+	t_redir	*tmp;
 
-	cmd = ft_calloc(1, sizeof(t_cmd));
-	if (!cmd)
-		return (NULL);
-	cmd->argv = NULL;
-	cmd->redirects = NULL;
-	cmd->next = NULL;
-	return (cmd);
+	while (redir)
+	{
+		tmp = redir->next;
+		free(redir->file);
+		free(redir);
+		redir = tmp;
+	}
 }
 
-t_redir	*make_redirection(t_token_kind type, char *file)
+static void	dispose_argv(char **argv)
 {
-	t_redir	*redir;
+	int	i;
 
-	redir = ft_calloc(1, sizeof(t_redir));
-	if (!redir)
-		return (NULL);
-	redir->type = type;
-	redir->file = file;
-	redir->fd = -1;
-	redir->next = NULL;
-	return (redir);
+	if (!argv)
+		return ;
+	i = 0;
+	while (argv[i])
+	{
+		free(argv[i]);
+		i++;
+	}
+	free(argv);
 }
 
-t_cmd	*command_connect(t_cmd *cmd1, t_cmd *cmd2)
+void	dispose_command(t_cmd *cmd)
 {
 	t_cmd	*tmp;
 
-	if (!cmd1)
-		return (cmd2);
-	if (!cmd2)
-		return (cmd1);
-	tmp = cmd1;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = cmd2;
-	return (cmd1);
+	while (cmd)
+	{
+		tmp = cmd->next;
+		dispose_argv(cmd->argv);
+		dispose_redirects(cmd->redirects);
+		free(cmd);
+		cmd = tmp;
+	}
 }

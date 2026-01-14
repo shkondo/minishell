@@ -6,66 +6,71 @@
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 01:46:42 by shkondo           #+#    #+#             */
-/*   Updated: 2025/12/24 21:36:45 by shkondo          ###   ########.fr       */
+/*   Updated: 2026/01/14 00:00:00 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	launch(char **args)
+static void	process_line(char *line, t_shell *shell)
 {
-	pid_t	pid;
-	pid_t	wpid;
-	int		status;
+	t_token	*tokens;
+	t_cmd	*cmd;
 
-	pid = fork();
-	if (pid == 0)
+	tokens = tokenize(line);
+	if (!tokens)
+		return ;
+	cmd = parse_pipeline(tokens);
+	if (cmd)
 	{
-		if (execve(args[0], args) == -1)
-			perror("Error");
-		exit(EXIT_FAILURE);
+		/* TODO: execute(cmd, shell) */
+		(void)shell;
+		dispose_command(cmd);
 	}
-	else if (pid < 0)
-		perror("Error");
-	else
-	{
-		wpid = waitpid(pid, &status, WUNTRACED);
-		while (!WIFEXITED(status) && !WIFSIGNALED(status))
-			wpid = waitpid(pid, &status, WUNTRACED);
-	}
-	return (1);
+	free_tokens(tokens);
 }
 
-void	loop(void)
+static void	loop(t_shell *shell)
 {
 	char	*line;
-	t_token	**args;
-	t_token	**cmd_list;
-	int		status;
 
-	status = 1;
 	while (1)
 	{
-		line = readline("msh$ ");
+		line = readline("minishell$ ");
 		if (!line)
 		{
-			free(line);
+			ft_putstr_fd("exit\n", 1);
 			break ;
 		}
 		if (*line)
+		{
 			add_history(line);
-		args = tokenize(line);
-		cmd_list = parse(args);
-		status = execute(cmd_list);
+			process_line(line, shell);
+		}
 		free(line);
-		ft_list_free(args);
 	}
 }
 
-int	main(int argc, char **argv)
+static void	init_shell(t_shell *shell, char **envp)
 {
+	shell->env_list = init_env_list(envp);
+	shell->exit_status = 0;
+	shell->envp = envp;
+}
+
+static void	cleanup_shell(t_shell *shell)
+{
+	free_env_list(shell->env_list);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_shell	shell;
+
 	(void)argc;
 	(void)argv;
-	loop();
-	return (0);
+	init_shell(&shell, envp);
+	loop(&shell);
+	cleanup_shell(&shell);
+	return (shell.exit_status);
 }

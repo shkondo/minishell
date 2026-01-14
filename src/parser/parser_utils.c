@@ -1,25 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   general.c                                          :+:      :+:    :+:   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/26 19:56:15 by shkondo           #+#    #+#             */
-/*   Updated: 2026/01/04 22:16:56 by shkondo          ###   ########.fr       */
+/*   Created: 2026/01/12 00:00:00 by shkondo           #+#    #+#             */
+/*   Updated: 2026/01/12 00:00:00 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// TODO: split_lineは不要になったため削除予定
-
-int	is_metachar(char c)
+void	parser_init(t_parser *p, t_token *tokens)
 {
-	return (c == '|' || c == '<' || c == '>');
+	p->cur = tokens;
+	p->error = 0;
+	p->err_token = NULL;
 }
 
-int	is_space(char c)
+void	parser_advance(t_parser *p)
 {
-	return (ft_strchr(TOK_DELIM, c) != NULL);
+	if (p->cur && p->cur->kind != TOKEN_EOF)
+		p->cur = p->cur->next;
+}
+
+int	parser_check(t_parser *p, t_token_kind kind)
+{
+	if (!p->cur)
+		return (0);
+	return (p->cur->kind == kind);
+}
+
+void	parser_error(t_parser *p, char *token)
+{
+	if (p->error)
+		return ;
+	p->error = 1;
+	p->err_token = token;
 }
