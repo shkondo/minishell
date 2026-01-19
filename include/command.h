@@ -6,7 +6,7 @@
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 00:29:53 by shkondo           #+#    #+#             */
-/*   Updated: 2026/01/08 08:55:30 by shkondo          ###   ########.fr       */
+/*   Updated: 2026/01/15 00:22:18 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,10 @@ typedef struct s_parser
 	char			*err_token;
 }					t_parser;
 
-/* lst_word.c */
 t_word				*create_word(char *str, int flags);
 t_word				*copy_word(t_word *word);
 void				free_word(t_word *word);
 
-/* lst_token.c */
 t_token				*create_token(t_token_kind kind, t_token *cur, char *str);
 t_token				*create_token_with_flags(t_token_kind kind, t_token *cur,
 						char *str, int flags);
@@ -84,14 +82,11 @@ t_token				*copy_tokens(t_token *tokens);
 void				free_tokens(t_token *tokens);
 size_t				token_list_size(t_token *token);
 
-/* tokenizer.c */
 t_token				*read_token_word(char *line, int *pos, t_token *cur);
 t_token				*tokenize(char *line);
 
-/* parser.c */
 t_cmd				*parse_pipeline(t_token *tokens);
 
-/* dispose_cmd.c */
 void				dispose_command(t_cmd *cmd);
 void				dispose_redirects(t_redir *redir);
 

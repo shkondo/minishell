@@ -6,7 +6,7 @@
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 01:33:10 by shkondo           #+#    #+#             */
-/*   Updated: 2026/01/04 22:18:10 by shkondo          ###   ########.fr       */
+/*   Updated: 2026/01/19 22:10:59 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 # include "libft.h"
 # include <errno.h>
 # include <fcntl.h>
-# include <readline/readline.h>
 # include <stdbool.h>
 # include <stdio.h>
+# include <readline/readline.h>
 # include <stdlib.h>
 # include <sys/stat.h>
 # include <sys/types.h>
