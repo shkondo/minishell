@@ -2,7 +2,7 @@
 .DS_Store
 
 # Editor
-.$module_diagram.drawio.bkp
+*.bkp
 .cursor/
 
 # Language Server / IDE
@@ -23,5 +23,5 @@ minishell
 tmp/
 
 # Local directories
-subjects/
+docs/spec
 test/
