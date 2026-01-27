@@ -71,16 +71,13 @@ typedef struct s_parser
 	char			*err_token;
 }					t_parser;
 
-t_word				*create_word(char *str, int flags);
 t_word				*copy_word(t_word *word);
 void				free_word(t_word *word);
 
 t_token				*create_token(t_token_kind kind, t_token *cur, char *str);
 t_token				*create_token_with_flags(t_token_kind kind, t_token *cur,
 						char *str, int flags);
-t_token				*copy_tokens(t_token *tokens);
 void				free_tokens(t_token *tokens);
-size_t				token_list_size(t_token *token);
 
 t_token				*read_token_word(char *line, int *pos, t_token *cur);
 t_token				*tokenize(char *line);

@@ -12,20 +12,6 @@
 
 #include "minishell.h"
 
-t_word	*create_word(char *str, int flags)
-{
-	t_word	*new_word;
-
-	if (!str)
-		return (NULL);
-	new_word = malloc(sizeof(t_word));
-	if (!new_word)
-		return (NULL);
-	new_word->str = str;
-	new_word->flags = flags;
-	return (new_word);
-}
-
 t_word	*copy_word(t_word *word)
 {
 	t_word	*new_word;

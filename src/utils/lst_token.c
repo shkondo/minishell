@@ -12,8 +12,8 @@
 
 #include "minishell.h"
 
-t_token	*create_token_with_flags(t_token_kind kind, t_token *cur,
-								char *str, int flags)
+t_token	*create_token_with_flags(t_token_kind kind, t_token *cur, char *str,
+		int flags)
 {
 	t_token	*token;
 
@@ -51,17 +51,4 @@ void	free_tokens(t_token *tokens)
 		free_word(tokens->word);
 		tokens = tmp;
 	}
-}
-
-size_t	token_list_size(t_token *token)
-{
-	size_t	size;
-
-	size = 0;
-	while (token)
-	{
-		token = token->next;
-		size++;
-	}
-	return (size);
 }
