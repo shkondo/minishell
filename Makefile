@@ -14,10 +14,11 @@ NAME = minishell
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-INCLUDES = -I include -I libft
 
-# readline
-READLINE_FLAGS = -lreadline
+# readline (brew version for rl_replace_line support)
+READLINE_DIR = $(shell brew --prefix readline 2>/dev/null || echo /opt/homebrew/opt/readline)
+INCLUDES = -I include -I libft -I $(READLINE_DIR)/include
+READLINE_FLAGS = -L$(READLINE_DIR)/lib -lreadline
 
 # libft
 LIBFT_DIR = libft
@@ -42,7 +43,25 @@ SRCS = src/main.c \
        src/expander/subst.c \
        src/expander/subst_expand.c \
        src/expander/param_expand.c \
-       src/expander/dequote.c
+       src/expander/dequote.c \
+       src/expander/expand_cmd.c \
+       src/signals/sig.c \
+       src/signals/sig_heredoc.c \
+       src/builtins/builtins.c \
+       src/builtins/echo.c \
+       src/builtins/cd.c \
+       src/builtins/pwd.c \
+       src/builtins/export.c \
+       src/builtins/unset.c \
+       src/builtins/env.c \
+       src/builtins/exit.c \
+       src/redirection/redir.c \
+       src/redirection/redir_utils.c \
+       src/redirection/heredoc.c \
+       src/executor/execute_cmd.c \
+       src/executor/findcmd.c \
+       src/pipeline/pipeline.c \
+       src/pipeline/pipe_utils.c
 
 OBJS = $(SRCS:.c=.o)
 

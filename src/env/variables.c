@@ -6,7 +6,7 @@
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 00:00:00 by shkondo           #+#    #+#             */
-/*   Updated: 2026/01/12 00:00:00 by shkondo          ###   ########.fr       */
+/*   Updated: 2026/01/27 00:00:00 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,18 @@ int	set_var_value(char *name, char *value, t_env **env_list)
 	return (0);
 }
 
+static int	remove_env_node(t_env **env_list, t_env *prev, t_env *cur)
+{
+	if (prev)
+		prev->next = cur->next;
+	else
+		*env_list = cur->next;
+	free(cur->name);
+	free(cur->value);
+	free(cur);
+	return (0);
+}
+
 int	unset_var(char *name, t_env **env_list)
 {
 	t_env	*prev;
@@ -62,43 +74,14 @@ int	unset_var(char *name, t_env **env_list)
 
 	if (!name || !env_list || !*env_list)
 		return (-1);
+	prev = NULL;
 	cur = *env_list;
-	if (str_equal(cur->name, name))
-	{
-		*env_list = cur->next;
-		free(cur->name);
-		free(cur->value);
-		free(cur);
-		return (0);
-	}
-	prev = cur;
-	cur = cur->next;
 	while (cur)
 	{
 		if (str_equal(cur->name, name))
-		{
-			prev->next = cur->next;
-			free(cur->name);
-			free(cur->value);
-			free(cur);
-			return (0);
-		}
+			return (remove_env_node(env_list, prev, cur));
 		prev = cur;
 		cur = cur->next;
 	}
 	return (-1);
-}
-
-void	free_env_list(t_env *env)
-{
-	t_env	*tmp;
-
-	while (env)
-	{
-		tmp = env->next;
-		free(env->name);
-		free(env->value);
-		free(env);
-		env = tmp;
-	}
 }

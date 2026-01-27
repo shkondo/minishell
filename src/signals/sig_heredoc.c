@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h                                          :+:      :+:    :+:   */
+/*   sig_heredoc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,22 +10,26 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-# define BUILTIN_H
+#include "signals.h"
+#include <unistd.h>
 
-# include "variables.h"
+static void	sigint_heredoc_handler(int sig)
+{
+	g_signal_received = sig;
+	write(STDOUT_FILENO, "\n", 1);
+}
 
-typedef struct s_shell	t_shell;
+void	setup_signals_heredoc(void)
+{
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
 
-int						is_builtin(char *cmd);
-int						exec_builtin(char **argv, t_shell *shell);
-
-int						builtin_echo(char **argv);
-int						builtin_cd(char **argv, t_shell *shell);
-int						builtin_pwd(void);
-int						builtin_export(char **argv, t_shell *shell);
-int						builtin_unset(char **argv, t_shell *shell);
-int						builtin_env(t_shell *shell);
-int						builtin_exit(char **argv, t_shell *shell);
-
-#endif
+	sa_int.sa_handler = sigint_heredoc_handler;
+	sigemptyset(&sa_int.sa_mask);
+	sa_int.sa_flags = 0;
+	sigaction(SIGINT, &sa_int, NULL);
+	sa_quit.sa_handler = SIG_IGN;
+	sigemptyset(&sa_quit.sa_mask);
+	sa_quit.sa_flags = 0;
+	sigaction(SIGQUIT, &sa_quit, NULL);
+}

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_cmd.c                                      :+:      :+:    :+:   */
+/*   pipe_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -29,14 +29,46 @@ static int	get_exit_status(int status)
 	return (status);
 }
 
-static void	exec_external(t_cmd *cmd, t_shell *shell)
+int	wait_for_children(int n, int last_pid)
+{
+	int		status;
+	int		last_status;
+	pid_t	pid;
+	int		i;
+
+	last_status = 0;
+	i = 0;
+	while (i < n)
+	{
+		pid = wait(&status);
+		if (pid == last_pid)
+			last_status = get_exit_status(status);
+		i++;
+	}
+	return (last_status);
+}
+
+static void	setup_pipe_fds(int in_fd, int out_fd)
+{
+	if (in_fd != STDIN_FILENO)
+	{
+		dup2(in_fd, STDIN_FILENO);
+		close(in_fd);
+	}
+	if (out_fd != STDOUT_FILENO)
+	{
+		dup2(out_fd, STDOUT_FILENO);
+		close(out_fd);
+	}
+}
+
+static void	exec_cmd_or_builtin(t_cmd *cmd, t_shell *shell)
 {
 	char	*path;
 	char	**envp;
 
-	setup_signals_child();
-	if (setup_redirections(cmd->redirects) == -1)
-		exit(1);
+	if (is_builtin(cmd->argv[0]))
+		exit(exec_builtin(cmd->argv, shell));
 	path = find_command(cmd->argv[0], shell);
 	if (!path)
 	{
@@ -47,56 +79,15 @@ static void	exec_external(t_cmd *cmd, t_shell *shell)
 	}
 	envp = env_list_to_envp(shell->env_list);
 	execve(path, cmd->argv, envp);
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(cmd->argv[0], STDERR_FILENO);
-	ft_putendl_fd(": Permission denied", STDERR_FILENO);
 	exit(ERR_PERM);
 }
 
-static int	exec_builtin_with_redir(t_cmd *cmd, t_shell *shell)
+void	exec_pipe_child(t_cmd *cmd, t_shell *shell, int in_fd, int out_fd)
 {
-	int	saved_stdin;
-	int	saved_stdout;
-	int	ret;
-
-	if (save_fds(&saved_stdin, &saved_stdout) == -1)
-		return (1);
+	setup_signals_child();
+	setup_pipe_fds(in_fd, out_fd);
 	if (setup_redirections(cmd->redirects) == -1)
-	{
-		restore_fds(saved_stdin, saved_stdout);
-		return (1);
-	}
-	ret = exec_builtin(cmd->argv, shell);
-	restore_fds(saved_stdin, saved_stdout);
-	return (ret);
-}
-
-int	execute_simple_command(t_cmd *cmd, t_shell *shell)
-{
-	pid_t	pid;
-	int		status;
-
+		exit(1);
 	expand_command(cmd, shell);
-	if (!cmd->argv || !cmd->argv[0])
-		return (0);
-	if (is_builtin(cmd->argv[0]))
-		return (exec_builtin_with_redir(cmd, shell));
-	setup_signals_ignore();
-	pid = fork();
-	if (pid == -1)
-		return (1);
-	if (pid == 0)
-		exec_external(cmd, shell);
-	waitpid(pid, &status, 0);
-	setup_signals_interactive();
-	return (get_exit_status(status));
-}
-
-int	execute(t_cmd *cmd, t_shell *shell)
-{
-	if (!cmd)
-		return (0);
-	if (cmd->next)
-		return (execute_pipeline(cmd, shell));
-	return (execute_simple_command(cmd, shell));
+	exec_cmd_or_builtin(cmd, shell);
 }

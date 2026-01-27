@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "signals.h"
+#include <stdio.h>
 
 static void	process_line(char *line, t_shell *shell)
 {
@@ -23,8 +25,7 @@ static void	process_line(char *line, t_shell *shell)
 	cmd = parse_pipeline(tokens);
 	if (cmd)
 	{
-		/* TODO: execute(cmd, shell) */
-		(void)shell;
+		shell->exit_status = execute(cmd, shell);
 		dispose_command(cmd);
 	}
 	free_tokens(tokens);
@@ -34,8 +35,10 @@ static void	loop(t_shell *shell)
 {
 	char	*line;
 
+	setup_signals_interactive();
 	while (1)
 	{
+		g_signal_received = 0;
 		line = readline("minishell$ ");
 		if (!line)
 		{

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h                                          :+:      :+:    :+:   */
+/*   redir_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,22 +10,34 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-# define BUILTIN_H
+#include "redir.h"
+#include <unistd.h>
 
-# include "variables.h"
+int	save_fds(int *saved_stdin, int *saved_stdout)
+{
+	*saved_stdin = dup(STDIN_FILENO);
+	*saved_stdout = dup(STDOUT_FILENO);
+	if (*saved_stdin == -1 || *saved_stdout == -1)
+	{
+		if (*saved_stdin != -1)
+			close(*saved_stdin);
+		if (*saved_stdout != -1)
+			close(*saved_stdout);
+		return (-1);
+	}
+	return (0);
+}
 
-typedef struct s_shell	t_shell;
-
-int						is_builtin(char *cmd);
-int						exec_builtin(char **argv, t_shell *shell);
-
-int						builtin_echo(char **argv);
-int						builtin_cd(char **argv, t_shell *shell);
-int						builtin_pwd(void);
-int						builtin_export(char **argv, t_shell *shell);
-int						builtin_unset(char **argv, t_shell *shell);
-int						builtin_env(t_shell *shell);
-int						builtin_exit(char **argv, t_shell *shell);
-
-#endif
+void	restore_fds(int saved_stdin, int saved_stdout)
+{
+	if (saved_stdin != -1)
+	{
+		dup2(saved_stdin, STDIN_FILENO);
+		close(saved_stdin);
+	}
+	if (saved_stdout != -1)
+	{
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdout);
+	}
+}

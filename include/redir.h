@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h                                          :+:      :+:    :+:   */
+/*   redir.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,22 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-# define BUILTIN_H
+#ifndef REDIR_H
+# define REDIR_H
 
-# include "variables.h"
+# include "command.h"
 
 typedef struct s_shell	t_shell;
 
-int						is_builtin(char *cmd);
-int						exec_builtin(char **argv, t_shell *shell);
+int						setup_redirections(t_redir *redir);
+int						do_redirection(t_redir *redir);
+void					restore_fds(int saved_stdin, int saved_stdout);
+int						save_fds(int *saved_stdin, int *saved_stdout);
 
-int						builtin_echo(char **argv);
-int						builtin_cd(char **argv, t_shell *shell);
-int						builtin_pwd(void);
-int						builtin_export(char **argv, t_shell *shell);
-int						builtin_unset(char **argv, t_shell *shell);
-int						builtin_env(t_shell *shell);
-int						builtin_exit(char **argv, t_shell *shell);
+int						do_heredoc(t_redir *redir, t_shell *shell);
 
 #endif
