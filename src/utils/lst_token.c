@@ -43,12 +43,11 @@ void	free_tokens(t_token *tokens)
 {
 	t_token	*tmp;
 
-	if (!tokens)
-		return ;
 	while (tokens)
 	{
 		tmp = tokens->next;
 		free_word(tokens->word);
+		free(tokens);
 		tokens = tmp;
 	}
 }
