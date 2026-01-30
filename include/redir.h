@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   general.c                                          :+:      :+:    :+:   */
+/*   redir.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/26 19:56:15 by shkondo           #+#    #+#             */
-/*   Updated: 2026/01/04 22:16:56 by shkondo          ###   ########.fr       */
+/*   Created: 2026/01/27 00:00:00 by shkondo           #+#    #+#             */
+/*   Updated: 2026/01/27 00:00:00 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef REDIR_H
+# define REDIR_H
 
-// TODO: split_lineは不要になったため削除予定
+# include "command.h"
 
-int	is_metachar(char c)
-{
-	return (c == '|' || c == '<' || c == '>');
-}
+typedef struct s_shell	t_shell;
 
-int	is_space(char c)
-{
-	return (ft_strchr(TOK_DELIM, c) != NULL);
-}
+int						setup_redirections(t_redir *redir);
+int						do_redirection(t_redir *redir);
+void					restore_fds(int saved_stdin, int saved_stdout);
+int						save_fds(int *saved_stdin, int *saved_stdout);
+
+int						do_heredoc(t_redir *redir, t_shell *shell);
+
+#endif

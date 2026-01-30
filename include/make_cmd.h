@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   general.c                                          :+:      :+:    :+:   */
+/*   make_cmd.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/26 19:56:15 by shkondo           #+#    #+#             */
-/*   Updated: 2026/01/04 22:16:56 by shkondo          ###   ########.fr       */
+/*   Created: 2026/01/12 00:00:00 by shkondo           #+#    #+#             */
+/*   Updated: 2026/01/12 00:00:00 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef MAKE_CMD_H
+# define MAKE_CMD_H
 
-// TODO: split_lineは不要になったため削除予定
+# include "command.h"
 
-int	is_metachar(char c)
-{
-	return (c == '|' || c == '<' || c == '>');
-}
+/* make_cmd.c */
+t_cmd	*make_simple_command(void);
+t_redir	*make_redirection(t_token_kind type, char *file);
+t_cmd	*command_connect(t_cmd *cmd1, t_cmd *cmd2);
 
-int	is_space(char c)
-{
-	return (ft_strchr(TOK_DELIM, c) != NULL);
-}
+#endif

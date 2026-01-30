@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   general.c                                          :+:      :+:    :+:   */
+/*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/26 19:56:15 by shkondo           #+#    #+#             */
-/*   Updated: 2026/01/04 22:16:56 by shkondo          ###   ########.fr       */
+/*   Created: 2026/01/27 00:00:00 by shkondo           #+#    #+#             */
+/*   Updated: 2026/01/27 00:00:00 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef SIGNALS_H
+# define SIGNALS_H
 
-// TODO: split_lineは不要になったため削除予定
+# include <signal.h>
 
-int	is_metachar(char c)
-{
-	return (c == '|' || c == '<' || c == '>');
-}
+extern volatile sig_atomic_t	g_signal_received;
 
-int	is_space(char c)
-{
-	return (ft_strchr(TOK_DELIM, c) != NULL);
-}
+void							setup_signals_interactive(void);
+void							setup_signals_child(void);
+void							setup_signals_ignore(void);
+void							setup_signals_heredoc(void);
+
+#endif

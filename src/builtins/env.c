@@ -1,25 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   general.c                                          :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/26 19:56:15 by shkondo           #+#    #+#             */
-/*   Updated: 2026/01/04 22:16:56 by shkondo          ###   ########.fr       */
+/*   Created: 2026/01/27 00:00:00 by shkondo           #+#    #+#             */
+/*   Updated: 2026/01/27 00:00:00 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "builtin.h"
+#include "libft.h"
 #include "minishell.h"
 
-// TODO: split_lineは不要になったため削除予定
-
-int	is_metachar(char c)
+int	builtin_env(t_shell *shell)
 {
-	return (c == '|' || c == '<' || c == '>');
-}
+	t_env	*env;
 
-int	is_space(char c)
-{
-	return (ft_strchr(TOK_DELIM, c) != NULL);
+	env = shell->env_list;
+	while (env)
+	{
+		if (env->value)
+		{
+			ft_putstr_fd(env->name, STDOUT_FILENO);
+			ft_putchar_fd('=', STDOUT_FILENO);
+			ft_putendl_fd(env->value, STDOUT_FILENO);
+		}
+		env = env->next;
+	}
+	return (0);
 }

@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   general.c                                          :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/26 19:56:15 by shkondo           #+#    #+#             */
-/*   Updated: 2026/01/04 22:16:56 by shkondo          ###   ########.fr       */
+/*   Created: 2026/01/27 00:00:00 by shkondo           #+#    #+#             */
+/*   Updated: 2026/01/27 00:00:00 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "builtin.h"
+#include "libft.h"
+#include <stdlib.h>
+#include <unistd.h>
 
-// TODO: split_lineは不要になったため削除予定
-
-int	is_metachar(char c)
+int	builtin_pwd(void)
 {
-	return (c == '|' || c == '<' || c == '>');
-}
+	char	*cwd;
 
-int	is_space(char c)
-{
-	return (ft_strchr(TOK_DELIM, c) != NULL);
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		ft_putendl_fd("pwd: error retrieving current directory", STDERR_FILENO);
+		return (1);
+	}
+	ft_putendl_fd(cwd, STDOUT_FILENO);
+	free(cwd);
+	return (0);
 }

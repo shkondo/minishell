@@ -1,2 +1,27 @@
+# macOS
 .DS_Store
-.$module_diagram.drawio.bkp
+
+# Editor
+*.bkp
+.cursor/
+
+# Language Server / IDE
+.cache/
+.clangd
+compile_commands.json
+
+# Claude Code
+CLAUDE.md
+.claude/
+
+# Build artifacts
+*.o
+*.a
+minishell
+
+# Temporary files
+tmp/
+
+# Local directories
+docs/spec
+test/
