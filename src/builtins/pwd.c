@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h                                          :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,22 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-# define BUILTIN_H
+#include "builtin.h"
+#include "libft.h"
+#include <stdlib.h>
+#include <unistd.h>
 
-# include "variables.h"
+int	builtin_pwd(void)
+{
+	char	*cwd;
 
-typedef struct s_shell	t_shell;
-
-int						is_builtin(char *cmd);
-int						exec_builtin(char **argv, t_shell *shell);
-
-int						builtin_echo(char **argv);
-int						builtin_cd(char **argv, t_shell *shell);
-int						builtin_pwd(void);
-int						builtin_export(char **argv, t_shell *shell);
-int						builtin_unset(char **argv, t_shell *shell);
-int						builtin_env(t_shell *shell);
-int						builtin_exit(char **argv, t_shell *shell);
-
-#endif
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		ft_putendl_fd("pwd: error retrieving current directory", STDERR_FILENO);
+		return (1);
+	}
+	ft_putendl_fd(cwd, STDOUT_FILENO);
+	free(cwd);
+	return (0);
+}

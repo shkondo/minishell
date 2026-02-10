@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h                                          :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,22 +10,47 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-# define BUILTIN_H
+#include "builtin.h"
+#include "libft.h"
 
-# include "variables.h"
+static int	is_n_flag(char *arg)
+{
+	int	i;
 
-typedef struct s_shell	t_shell;
+	if (!arg || arg[0] != '-')
+		return (0);
+	i = 1;
+	if (arg[i] == '\0')
+		return (0);
+	while (arg[i])
+	{
+		if (arg[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
-int						is_builtin(char *cmd);
-int						exec_builtin(char **argv, t_shell *shell);
+int	builtin_echo(char **argv)
+{
+	int	i;
+	int	newline;
 
-int						builtin_echo(char **argv);
-int						builtin_cd(char **argv, t_shell *shell);
-int						builtin_pwd(void);
-int						builtin_export(char **argv, t_shell *shell);
-int						builtin_unset(char **argv, t_shell *shell);
-int						builtin_env(t_shell *shell);
-int						builtin_exit(char **argv, t_shell *shell);
-
-#endif
+	newline = 1;
+	i = 1;
+	while (argv[i] && is_n_flag(argv[i]))
+	{
+		newline = 0;
+		i++;
+	}
+	while (argv[i])
+	{
+		ft_putstr_fd(argv[i], STDOUT_FILENO);
+		if (argv[i + 1])
+			ft_putchar_fd(' ', STDOUT_FILENO);
+		i++;
+	}
+	if (newline)
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	return (0);
+}

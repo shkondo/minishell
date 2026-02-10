@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   make_cmd.c                                         :+:      :+:    :+:   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,44 +12,30 @@
 
 #include "minishell.h"
 
-t_cmd	*make_simple_command(void)
+void	parser_init(t_parser *p, t_token *tokens)
 {
-	t_cmd	*cmd;
-
-	cmd = ft_calloc(1, sizeof(t_cmd));
-	if (!cmd)
-		return (NULL);
-	cmd->argv = NULL;
-	cmd->redirects = NULL;
-	cmd->next = NULL;
-	return (cmd);
+	p->cur = tokens;
+	p->error = 0;
+	p->err_token = NULL;
 }
 
-t_redir	*make_redirection(t_token_kind type, char *file)
+void	parser_advance(t_parser *p)
 {
-	t_redir	*redir;
-
-	redir = ft_calloc(1, sizeof(t_redir));
-	if (!redir)
-		return (NULL);
-	redir->type = type;
-	redir->file = file;
-	redir->fd = -1;
-	redir->next = NULL;
-	return (redir);
+	if (p->cur && p->cur->kind != TOKEN_EOF)
+		p->cur = p->cur->next;
 }
 
-t_cmd	*command_connect(t_cmd *cmd1, t_cmd *cmd2)
+int	parser_check(t_parser *p, t_token_kind kind)
 {
-	t_cmd	*tmp;
+	if (!p->cur)
+		return (0);
+	return (p->cur->kind == kind);
+}
 
-	if (!cmd1)
-		return (cmd2);
-	if (!cmd2)
-		return (cmd1);
-	tmp = cmd1;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = cmd2;
-	return (cmd1);
+void	parser_error(t_parser *p, char *token)
+{
+	if (p->error)
+		return ;
+	p->error = 1;
+	p->err_token = token;
 }

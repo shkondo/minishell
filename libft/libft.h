@@ -17,8 +17,8 @@
 # include <stddef.h>
 # include <stdint.h>
 # include <stdlib.h>
-# include <unistd.h>
 # include <string.h>
+# include <unistd.h>
 
 typedef unsigned char	t_uint8_t;
 typedef unsigned short	t_uint16_t;
@@ -26,7 +26,9 @@ typedef unsigned int	t_uint32_t;
 
 # define TRUE 1
 # define FALSE 0
-# define EOF -1
+# ifndef EOF
+#  define EOF -1
+# endif
 
 typedef struct s_list
 {

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   make_cmd.c                                         :+:      :+:    :+:   */
+/*   variables.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,46 +10,27 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef VARIABLES_H
+# define VARIABLES_H
 
-t_cmd	*make_simple_command(void)
+typedef struct s_env
 {
-	t_cmd	*cmd;
+	char			*name;
+	char			*value;
+	struct s_env	*next;
+}					t_env;
 
-	cmd = ft_calloc(1, sizeof(t_cmd));
-	if (!cmd)
-		return (NULL);
-	cmd->argv = NULL;
-	cmd->redirects = NULL;
-	cmd->next = NULL;
-	return (cmd);
-}
+/* variables.c */
+char	*get_var_value(char *name, t_env *env_list);
+int		set_var_value(char *name, char *value, t_env **env_list);
+int		unset_var(char *name, t_env **env_list);
+t_env	*init_env_list(char **envp);
+void	free_env_list(t_env *env);
 
-t_redir	*make_redirection(t_token_kind type, char *file)
-{
-	t_redir	*redir;
+/* variables_utils.c */
+t_env	*find_env(char *name, t_env *env_list);
+t_env	*create_env_node(char *name, char *value);
+char	**env_list_to_envp(t_env *env_list);
+int		env_list_size(t_env *env_list);
 
-	redir = ft_calloc(1, sizeof(t_redir));
-	if (!redir)
-		return (NULL);
-	redir->type = type;
-	redir->file = file;
-	redir->fd = -1;
-	redir->next = NULL;
-	return (redir);
-}
-
-t_cmd	*command_connect(t_cmd *cmd1, t_cmd *cmd2)
-{
-	t_cmd	*tmp;
-
-	if (!cmd1)
-		return (cmd2);
-	if (!cmd2)
-		return (cmd1);
-	tmp = cmd1;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = cmd2;
-	return (cmd1);
-}
+#endif

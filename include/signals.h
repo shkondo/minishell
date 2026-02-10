@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h                                          :+:      :+:    :+:   */
+/*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,22 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-# define BUILTIN_H
+#ifndef SIGNALS_H
+# define SIGNALS_H
 
-# include "variables.h"
+# include <signal.h>
 
-typedef struct s_shell	t_shell;
+extern volatile sig_atomic_t	g_signal_received;
 
-int						is_builtin(char *cmd);
-int						exec_builtin(char **argv, t_shell *shell);
-
-int						builtin_echo(char **argv);
-int						builtin_cd(char **argv, t_shell *shell);
-int						builtin_pwd(void);
-int						builtin_export(char **argv, t_shell *shell);
-int						builtin_unset(char **argv, t_shell *shell);
-int						builtin_env(t_shell *shell);
-int						builtin_exit(char **argv, t_shell *shell);
+void							setup_signals_interactive(void);
+void							setup_signals_child(void);
+void							setup_signals_ignore(void);
+void							setup_signals_heredoc(void);
 
 #endif
