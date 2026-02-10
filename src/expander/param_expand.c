@@ -71,8 +71,5 @@ char	*param_expand(char *str, int *i, t_shell *shell)
 		result = expand_variable(str, i, shell->env_list);
 		return (result);
 	}
-	if (str[*i] == '\0' || str[*i] == '"' || str[*i] == '\'')
-		return (ft_strdup("$"));
-	(*i)++;
-	return (ft_strdup(""));
+	return (ft_strdup("$"));
 }
