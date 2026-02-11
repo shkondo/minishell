@@ -66,8 +66,12 @@ static void	exec_cmd_or_builtin(t_cmd *cmd, t_shell *shell)
 {
 	char	*path;
 	char	**envp;
+	int		builtin;
 
-	if (is_builtin(cmd->argv[0]))
+	builtin = is_builtin(cmd->argv[0]);
+	if (builtin && ft_strncmp(cmd->argv[0], "env", 4) == 0 && cmd->argv[1])
+		builtin = 0;
+	if (builtin)
 		exit(exec_builtin(cmd->argv, shell));
 	path = find_command(cmd->argv[0], shell);
 	if (!path)
