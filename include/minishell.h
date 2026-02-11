@@ -3,18 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*   By: yutinoue <yutinoue@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 01:33:10 by shkondo           #+#    #+#             */
-/*   Updated: 2026/01/27 00:00:00 by shkondo          ###   ########.fr       */
+/*   Updated: 2026/02/11 18:42:11 by yutinoue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "builtin.h"
+# include "command.h"
+# include "executor.h"
+# include "libft.h"
+# include "ft_printf.h"
+# include "make_cmd.h"
+# include "subst.h"
+# include "variables.h"
 # include <errno.h>
 # include <fcntl.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <stdarg.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -22,15 +33,6 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <readline/history.h>
-# include <readline/readline.h>
-# include "builtin.h"
-# include "command.h"
-# include "executor.h"
-# include "libft.h"
-# include "make_cmd.h"
-# include "subst.h"
-# include "variables.h"
 
 # define BUFFER_SIZE 1024
 # define TOK_BUFSIZE 64
@@ -40,6 +42,7 @@ typedef struct s_shell
 {
 	t_env	*env_list;
 	int		exit_status;
+	int		should_exit;
 	char	**envp;
 }			t_shell;
 

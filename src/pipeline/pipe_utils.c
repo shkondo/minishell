@@ -67,7 +67,7 @@ static void	exec_cmd_or_builtin(t_cmd *cmd, t_shell *shell)
 	char	*path;
 	char	**envp;
 
-	if (is_builtin(cmd->argv[0]))
+	if (is_builtin_cmd(cmd->argv))
 		exit(exec_builtin(cmd->argv, shell));
 	path = find_command(cmd->argv[0], shell);
 	if (!path)
@@ -79,6 +79,9 @@ static void	exec_cmd_or_builtin(t_cmd *cmd, t_shell *shell)
 	}
 	envp = env_list_to_envp(shell->env_list);
 	execve(path, cmd->argv, envp);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(cmd->argv[0], STDERR_FILENO);
+	ft_putendl_fd(": Permission denied", STDERR_FILENO);
 	exit(ERR_PERM);
 }
 
@@ -89,5 +92,7 @@ void	exec_pipe_child(t_cmd *cmd, t_shell *shell, int in_fd, int out_fd)
 	if (setup_redirections(cmd->redirects) == -1)
 		exit(1);
 	expand_command(cmd, shell);
+	if (!cmd->argv || !cmd->argv[0])
+		exit(0);
 	exec_cmd_or_builtin(cmd, shell);
 }

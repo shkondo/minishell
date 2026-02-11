@@ -6,7 +6,7 @@
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 00:00:00 by shkondo           #+#    #+#             */
-/*   Updated: 2026/01/27 00:00:00 by shkondo          ###   ########.fr       */
+/*   Updated: 2026/02/11 05:27:50 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 # define BUILTIN_H
 
 # include "variables.h"
+# include <stdio.h>
 
 typedef struct s_shell	t_shell;
 
 int						is_builtin(char *cmd);
+int						is_builtin_cmd(char **argv);
 int						exec_builtin(char **argv, t_shell *shell);
 
 int						builtin_echo(char **argv);

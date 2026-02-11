@@ -6,7 +6,7 @@
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 01:46:42 by shkondo           #+#    #+#             */
-/*   Updated: 2026/01/14 00:00:00 by shkondo          ###   ########.fr       */
+/*   Updated: 2026/02/11 05:27:50 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,10 @@ static void	loop(t_shell *shell)
 			process_line(line, shell);
 		}
 		free(line);
+		if (shell->should_exit)
+		{
+			break ;
+		}
 	}
 }
 
@@ -58,6 +62,7 @@ static void	init_shell(t_shell *shell, char **envp)
 {
 	shell->env_list = init_env_list(envp);
 	shell->exit_status = 0;
+	shell->should_exit = 0;
 	shell->envp = envp;
 }
 

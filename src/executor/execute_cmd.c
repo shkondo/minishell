@@ -79,7 +79,7 @@ int	execute_simple_command(t_cmd *cmd, t_shell *shell)
 	expand_command(cmd, shell);
 	if (!cmd->argv || !cmd->argv[0])
 		return (0);
-	if (is_builtin(cmd->argv[0]))
+	if (is_builtin_cmd(cmd->argv))
 		return (exec_builtin_with_redir(cmd, shell));
 	setup_signals_ignore();
 	pid = fork();
