@@ -91,7 +91,7 @@ int	builtin_exit(char **argv, t_shell *shell)
 	argc = count_args(argv);
 	if (argc == 1)
 		return (request_exit(shell, shell->exit_status));
-	exit_code = (int)(ft_atoll(argv[1], &err) % 256);
+	exit_code = (int)(ft_atoll(argv[1], &err) & 0xFF);
 	if (!is_numeric(argv[1]) || err)
 	{
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);

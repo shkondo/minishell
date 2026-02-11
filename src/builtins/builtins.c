@@ -41,6 +41,8 @@ int	is_builtin(char *cmd)
 
 int	is_builtin_cmd(char **argv)
 {
+	if (!argv || !argv[0])
+		return (0);
 	if (!is_builtin(argv[0]))
 		return (0);
 	if (ft_strncmp(argv[0], "env", 4) == 0 && argv[1])
