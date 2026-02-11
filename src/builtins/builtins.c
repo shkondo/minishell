@@ -39,6 +39,15 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
+int	is_builtin_cmd(char **argv)
+{
+	if (!is_builtin(argv[0]))
+		return (0);
+	if (ft_strncmp(argv[0], "env", 4) == 0 && argv[1])
+		return (0);
+	return (1);
+}
+
 static int	exec_builtin_sub(char **argv, t_shell *shell)
 {
 	if (str_equal(argv[0], "export"))
@@ -52,8 +61,10 @@ static int	exec_builtin_sub(char **argv, t_shell *shell)
 	return (1);
 }
 
-static int	exec_builtin_cmd(char **argv, t_shell *shell)
+int	exec_builtin(char **argv, t_shell *shell)
 {
+	if (!argv || !argv[0])
+		return (1);
 	if (str_equal(argv[0], "echo"))
 		return (builtin_echo(argv));
 	if (str_equal(argv[0], "cd"))
@@ -61,11 +72,4 @@ static int	exec_builtin_cmd(char **argv, t_shell *shell)
 	if (str_equal(argv[0], "pwd"))
 		return (builtin_pwd());
 	return (exec_builtin_sub(argv, shell));
-}
-
-int	exec_builtin(char **argv, t_shell *shell)
-{
-	if (!argv || !argv[0])
-		return (1);
-	return (exec_builtin_cmd(argv, shell));
 }

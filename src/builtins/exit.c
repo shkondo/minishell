@@ -86,7 +86,8 @@ int	builtin_exit(char **argv, t_shell *shell)
 	int	exit_code;
 	int	err;
 
-	ft_putendl_fd("exit", STDERR_FILENO);
+	if (isatty(STDIN_FILENO))
+		ft_putendl_fd("exit", STDERR_FILENO);
 	argc = count_args(argv);
 	if (argc == 1)
 		return (request_exit(shell, shell->exit_status));
