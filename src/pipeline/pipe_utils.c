@@ -92,5 +92,7 @@ void	exec_pipe_child(t_cmd *cmd, t_shell *shell, int in_fd, int out_fd)
 	if (setup_redirections(cmd->redirects) == -1)
 		exit(1);
 	expand_command(cmd, shell);
+	if (!cmd->argv || !cmd->argv[0])
+		exit(0);
 	exec_cmd_or_builtin(cmd, shell);
 }
