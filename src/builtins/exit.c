@@ -44,7 +44,7 @@ static int	count_args(char **argv)
 	return (count);
 }
 
-static long long	ft_atoll(const char *str)
+static long long	ft_atoll(const char *str, int *err)
 {
 	long long	result;
 	int			sign;
@@ -52,9 +52,8 @@ static long long	ft_atoll(const char *str)
 
 	result = 0;
 	sign = 1;
+	*err = 0;
 	i = 0;
-	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
-		i++;
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
@@ -63,6 +62,11 @@ static long long	ft_atoll(const char *str)
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
+		if (result > (LLONG_MAX - (str[i] - '0')) / 10)
+		{
+			*err = 1;
+			return (0);
+		}
 		result = result * 10 + (str[i] - '0');
 		i++;
 	}
@@ -80,12 +84,14 @@ int	builtin_exit(char **argv, t_shell *shell)
 {
 	int	argc;
 	int	exit_code;
+	int	err;
 
 	ft_putendl_fd("exit", STDERR_FILENO);
 	argc = count_args(argv);
 	if (argc == 1)
 		return (request_exit(shell, shell->exit_status));
-	if (!is_numeric(argv[1]))
+	exit_code = (int)(ft_atoll(argv[1], &err) % 256);
+	if (!is_numeric(argv[1]) || err)
 	{
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(argv[1], STDERR_FILENO);
@@ -97,6 +103,5 @@ int	builtin_exit(char **argv, t_shell *shell)
 		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
 		return (1);
 	}
-	exit_code = (int)(ft_atoll(argv[1]) % 256);
 	return (request_exit(shell, exit_code));
 }
