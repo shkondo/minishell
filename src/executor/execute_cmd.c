@@ -75,15 +75,11 @@ int	execute_simple_command(t_cmd *cmd, t_shell *shell)
 {
 	pid_t	pid;
 	int		status;
-	int		builtin;
 
 	expand_command(cmd, shell);
 	if (!cmd->argv || !cmd->argv[0])
 		return (0);
-	builtin = is_builtin(cmd->argv[0]);
-	if (builtin && ft_strncmp(cmd->argv[0], "env", 4) == 0 && cmd->argv[1])
-		builtin = 0;
-	if (builtin)
+	if (is_builtin_cmd(cmd->argv))
 		return (exec_builtin_with_redir(cmd, shell));
 	setup_signals_ignore();
 	pid = fork();

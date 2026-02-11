@@ -19,6 +19,7 @@
 typedef struct s_shell	t_shell;
 
 int						is_builtin(char *cmd);
+int						is_builtin_cmd(char **argv);
 int						exec_builtin(char **argv, t_shell *shell);
 
 int						builtin_echo(char **argv);
