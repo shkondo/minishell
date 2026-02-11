@@ -24,5 +24,6 @@ tmp/
 
 # Local directories
 docs/spec
+docs/bug_reports
 docs/references
 test/

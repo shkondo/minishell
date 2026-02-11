@@ -6,7 +6,7 @@
 /*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 00:00:00 by shkondo           #+#    #+#             */
-/*   Updated: 2026/01/27 00:00:00 by shkondo          ###   ########.fr       */
+/*   Updated: 2026/02/11 05:27:50 by shkondo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,25 +69,34 @@ static long long	ft_atoll(const char *str)
 	return (result * sign);
 }
 
+static int	request_exit(t_shell *shell, int code)
+{
+	shell->should_exit = 1;
+	shell->exit_status = code;
+	return (code);
+}
+
 int	builtin_exit(char **argv, t_shell *shell)
 {
+	int	argc;
 	int	exit_code;
 
 	ft_putendl_fd("exit", STDERR_FILENO);
-	if (count_args(argv) == 1)
-		exit(shell->exit_status);
+	argc = count_args(argv);
+	if (argc == 1)
+		return (request_exit(shell, shell->exit_status));
 	if (!is_numeric(argv[1]))
 	{
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(argv[1], STDERR_FILENO);
 		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-		exit(255);
+		return (request_exit(shell, 255));
 	}
-	if (count_args(argv) > 2)
+	if (argc > 2)
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
 		return (1);
 	}
 	exit_code = (int)(ft_atoll(argv[1]) % 256);
-	exit(exit_code);
+	return (request_exit(shell, exit_code));
 }
