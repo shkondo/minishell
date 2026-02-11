@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                         :::      ::::::::   #
-#    Makefile                                           :+:      :+:    :+:   #
-#                                                     +:+ +:+         +:+     #
-#    By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        #
-#                                                 +#+#+#+#+#+   +#+           #
-#    Created: 2026/01/14 00:00:00 by shkondo           #+#    #+#             #
-#    Updated: 2026/01/14 00:00:00 by shkondo          ###   ########.fr       #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/02/11 20:07:40 by shkondo           #+#    #+#              #
+#    Updated: 2026/02/11 20:07:45 by shkondo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,6 @@ LIBFT = $(LIBFT_DIR)/libft.a
 
 # Source files
 SRCS = src/main.c \
-       src/error.c \
        src/lexer/tokenizer.c \
        src/lexer/quote_utils.c \
        src/utils/lst_token.c \
