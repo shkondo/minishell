@@ -15,10 +15,15 @@ NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-# readline (brew version for rl_replace_line support)
-READLINE_DIR = $(shell brew --prefix readline 2>/dev/null || echo /opt/homebrew/opt/readline)
-INCLUDES = -I include -I libft -I $(READLINE_DIR)/include
+# readline (macOS/Linux)
+READLINE_DIR = $(shell brew --prefix readline 2>/dev/null)
+INCLUDES = -I include -I libft -I libft/ft_printf/srcs
+READLINE_FLAGS = -lreadline
+
+ifneq ($(READLINE_DIR),)
+INCLUDES += -I $(READLINE_DIR)/include
 READLINE_FLAGS = -L$(READLINE_DIR)/lib -lreadline
+endif
 
 # libft
 LIBFT_DIR = libft
@@ -26,6 +31,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 
 # Source files
 SRCS = src/main.c \
+       src/error.c \
        src/lexer/tokenizer.c \
        src/lexer/quote_utils.c \
        src/utils/lst_token.c \
@@ -63,7 +69,14 @@ SRCS = src/main.c \
        src/pipeline/pipeline.c \
        src/pipeline/pipe_utils.c
 
-OBJS = $(SRCS:.c=.o)
+FT_PRINTF_SRCS = libft/ft_printf/srcs/ft_printf.c \
+                 libft/ft_printf/srcs/ft_printf_chars.c \
+                 libft/ft_printf/srcs/ft_printf_decimals.c \
+                 libft/ft_printf/srcs/ft_printf_hexs.c \
+                 libft/ft_printf/srcs/utils_printf_hex.c \
+                 libft/ft_printf/srcs/utils_printf_pointer.c
+
+OBJS = $(SRCS:.c=.o) $(FT_PRINTF_SRCS:.c=.o)
 
 all: $(NAME)
 

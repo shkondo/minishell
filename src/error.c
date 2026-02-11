@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shkondo <shkondo@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*   By: yutinoue <yutinoue@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 12:44:40 by shkondo           #+#    #+#             */
-/*   Updated: 2025/12/24 12:45:26 by shkondo          ###   ########.fr       */
+/*   Updated: 2026/02/11 18:36:42 by yutinoue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	error(char *fmt, ...)
 	va_list	ap;
 
 	va_start(ap, fmt);
-	perror("Error");
-	printf("\n");
-	return ;
+	ft_printf("%s\n", fmt);
+	va_end(ap);
 }
